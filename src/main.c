@@ -8,8 +8,8 @@ int main(int argc, char *argv[]) {
             EMULATOR_WINDOW_TITLE,
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            640,
-            320,
+            CHIP8_WIDTH * CHIP8_WINDOWS_MULTIPLIER,
+            CHIP8_HEIGHT * CHIP8_WINDOWS_MULTIPLIER,
             SDL_WINDOW_SHOWN);
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
