@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 project(EmuChip8 VERSION 0.0.1)
 
-set(CMAKE_CXX_STANDARD 23)
-
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
@@ -20,6 +18,6 @@ if(NOT libsdl-org_POPULATED)
     add_subdirectory(${libsdl-org_SOURCE_DIR} ${libsdl-org_BINARY_DIR})
 endif()
 
-add_executable(EmuChip8 main.cpp)
+add_executable(EmuChip8 src/main.c)
 
 target_link_libraries(EmuChip8 PRIVATE SDL2::SDL2)

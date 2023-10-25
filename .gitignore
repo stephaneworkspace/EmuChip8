@@ -39,3 +39,7 @@ cmake-build-release/
 *.bak
 *.tmp
 *~
+
+# build et bin
+build/
+bin/
