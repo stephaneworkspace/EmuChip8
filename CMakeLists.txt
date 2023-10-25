@@ -20,4 +20,5 @@ endif()
 
 add_executable(EmuChip8 src/main.c)
 
+target_include_directories(EmuChip8 PUBLIC include)
 target_link_libraries(EmuChip8 PRIVATE SDL2::SDL2)
