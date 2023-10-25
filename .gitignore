@@ -1,0 +1,41 @@
+# Fichier .gitignore
+
+# Fichiers binaires et de construction
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.app
+*.dSYM
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.user
+*.log
+*.sublime-project
+*.sublime-workspace
+
+# Directoires générés par CMake
+cmake-build-debug/
+cmake-build-release/
+
+# Autres fichiers générés par les IDEs et éditeurs
+.vscode/
+.idea/
+.vs/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.VC.opendb
+
+# Autres fichiers et dossiers ignorés
+*.DS_Store
+*.swp
+*.bak
+*.tmp
+*~
