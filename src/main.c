@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
         r.y = 0;
         r.w = 40;
         r.h = 40;
-        SDL_RenderDrawRect(renderer, &r);
+        SDL_RenderFillRect(renderer, &r);
         SDL_RenderPresent(renderer);
     }
 
