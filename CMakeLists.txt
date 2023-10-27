@@ -21,7 +21,9 @@ endif()
 add_executable(EmuChip8 src/main.c
         src/chip8memory.c
         src/chip8stack.c
-        src/chip8keyboard.c)
+        src/chip8keyboard.c
+        src/chip8.c
+        src/chip8screen.c)
 
 target_include_directories(EmuChip8 PUBLIC include)
 target_link_libraries(EmuChip8 PRIVATE SDL2::SDL2)

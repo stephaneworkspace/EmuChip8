@@ -10,6 +10,10 @@ const char keyboard_map[CHIP8_TOTAL_KEYS] = { SDLK_0, SDLK_1, SDLK_2, SDLK_3, SD
 int main(int argc, char *argv[]) {
 
     struct chip8 chip8;
+    chip8_init(&chip8);
+
+    chip8_screen_set(&chip8.screen, 10, 1);
+
     /*
      Register test
      =============
@@ -77,12 +81,20 @@ int main(int argc, char *argv[]) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
-        SDL_Rect r;
-        r.x = 0;
-        r.y = 0;
-        r.w = 40;
-        r.h = 40;
-        SDL_RenderFillRect(renderer, &r);
+
+        for (int x = 0; x < CHIP8_WIDTH; x++) {
+            for (int y = 0; y < CHIP8_HEIGHT; y++) {
+                if (chip8_screen_is_set(&chip8.screen, x, y)) {
+                    SDL_Rect r;
+                    r.x = x * CHIP8_WINDOWS_MULTIPLIER;
+                    r.y = y * CHIP8_WINDOWS_MULTIPLIER;
+                    r.w = CHIP8_WINDOWS_MULTIPLIER;
+                    r.h = CHIP8_WINDOWS_MULTIPLIER;
+                    SDL_RenderFillRect(renderer, &r);
+                }
+            }
+        }
+
         SDL_RenderPresent(renderer);
     }
 
