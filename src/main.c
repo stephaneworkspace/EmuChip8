@@ -1,6 +1,11 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "chip8.h"
+#include "chip8keyboard.h"
+
+const char keyboard_map[CHIP8_TOTAL_KEYS] = { SDLK_0, SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8,
+                                              SDLK_9, SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f};
 
 int main(int argc, char *argv[]) {
 
@@ -11,13 +16,23 @@ int main(int argc, char *argv[]) {
      chip8.registers.V[0x0f] = 50;
      chip8_memory_set(&chip8.memory, 0x400, 'Z');
      printf("%c\n", chip8_memory_get(&chip8.memory, 0x400));
-     */
-    /* Stack test */
+    */
+    /*
+     Stack test
+     =============
     chip8.registers.SP = 0;
     chip8_stack_push(&chip8, 0xff);
     chip8_stack_push(&chip8, 0xaa);
     printf("%x\n", chip8_stack_pop(&chip8));
     printf("%x\n", chip8_stack_pop(&chip8));
+    */
+    /*
+     Keyboard test
+     =============
+    */
+    //chip8_keyboard_down(&chip8.keyboard, 0x0f);
+    //bool is_down = chip8_keyboard_is_down(&chip8.keyboard, 0x0f);
+    //printf("%i\n", (int) is_down);
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = SDL_CreateWindow(
@@ -34,8 +49,28 @@ int main(int argc, char *argv[]) {
     SDL_Event e;
     while(running) {
         while(SDL_PollEvent(&e)) {
-            if(e.type == SDL_QUIT) {
-                running = 0;
+            switch(e.type) {
+                case SDL_QUIT:
+                {
+                    running = 0;
+                }
+                break;
+                case SDL_KEYDOWN:
+                {
+                    char key = e.key.keysym.sym;
+                    int vkey = chip8_keyboard_map(keyboard_map, key);
+                    if (vkey != -1)
+                        chip8_keyboard_down(&chip8.keyboard, vkey);
+                }
+                break;
+                case SDL_KEYUP:
+                {
+                    char key = e.key.keysym.sym;
+                    int vkey = chip8_keyboard_map(keyboard_map, key);
+                    if (vkey != -1)
+                        chip8_keyboard_up(&chip8.keyboard, vkey);
+                }
+                break;
             }
         }
 
