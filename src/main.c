@@ -10,9 +10,35 @@ const char keyboard_map[CHIP8_TOTAL_KEYS] = { SDLK_0, SDLK_1, SDLK_2, SDLK_3, SD
 
 int main(int argc, char *argv[]) {
 
+    if (argc < 2) {
+        printf("You must provide a file to load\n");
+        return -1;
+    }
+
+    const char* filename = argv[1];
+    printf("The filename to load is: %s\n", filename);
+
+    FILE* f = fopen(filename, "rb");
+    if (!f) {
+        printf("Failed to open the file");
+        return -1;
+    }
+
+    fseek(f, 0, SEEK_END); // go end file
+    long size = ftell(f); // Position end file
+    fseek(f, 0, SEEK_SET); // begin of file
+
+    char buf[size];
+    int res = fread(buf, size, 1, f);
+    if (res != 1) {
+        printf("Failed to read from file");
+        return -1;
+    }
+    //printf("&s\n", buf);
+
     struct chip8 chip8;
     chip8_init(&chip8);
-    chip8.registers.sound_timer = 255;
+    chip8_load(&chip8, buf, size);
 
     chip8_screen_draw_sprite(&chip8.screen, 32, 30, &chip8.memory.memory[0x00], 5);
 
@@ -41,6 +67,7 @@ int main(int argc, char *argv[]) {
     //printf("%i\n", (int) is_down);
     // Drawing pixel screen
     //chip8_screen_set(&chip8.screen, 10, 1);
+    //chip8.registers.sound_timer = 255;
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = SDL_CreateWindow(
@@ -110,6 +137,11 @@ int main(int argc, char *argv[]) {
             // Beep(8000, 100 + chip8.registers.sound_timer);
             chip8.registers.sound_timer -= 1;
         }
+
+        unsigned short opcode = chip8_memory_get_short(&chip8.memory, chip8.registers.PC);
+        chip8_exec(&chip8, opcode);
+        chip8.registers.PC += 2;
+        printf("%x\n", opcode);
     }
 
     SDL_DestroyRenderer(renderer); // Ajout de la destruction du rendu

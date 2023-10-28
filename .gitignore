@@ -43,3 +43,6 @@ cmake-build-release/
 # build et bin
 build/
 bin/
+
+# roms
+c8games/
