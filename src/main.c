@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
     struct chip8 chip8;
     chip8_init(&chip8);
     chip8_load(&chip8, buf, size);
+    chip8_keyboard_set_map(&chip8.keyboard, keyboard_map);
 
     //chip8_exec(&chip8, 0x1ff2);
     //printf("%x\n", chip8.registers.PC);
@@ -100,6 +101,12 @@ int main(int argc, char *argv[]) {
     // printf("%i\n", chip8.registers.V[0]);
     // printf("%i\n", chip8.registers.V[0x0f]);
 
+    // 0xD005
+    // chip8.registers.I = 0x00;
+    // chip8.registers.V[0] = 10;
+    // chip8.registers.V[1] = 10;
+    // chip8_exec(&chip8, 0xd005);
+
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = SDL_CreateWindow(
             EMULATOR_WINDOW_TITLE,
@@ -110,6 +117,11 @@ int main(int argc, char *argv[]) {
             SDL_WINDOW_SHOWN);
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
+
+    // test
+    chip8.registers.V[0] = 0x00;
+    chip8_exec(&chip8, 0xF00A);
+    printf("%x\n", chip8.registers.V[0]);
 
     int running = 1;
     SDL_Event e;
@@ -124,7 +136,7 @@ int main(int argc, char *argv[]) {
                 case SDL_KEYDOWN:
                 {
                     char key = e.key.keysym.sym;
-                    int vkey = chip8_keyboard_map(keyboard_map, key);
+                    int vkey = chip8_keyboard_map(&chip8.keyboard, key);
                     if (vkey != -1)
                         chip8_keyboard_down(&chip8.keyboard, vkey);
                 }
@@ -132,7 +144,7 @@ int main(int argc, char *argv[]) {
                 case SDL_KEYUP:
                 {
                     char key = e.key.keysym.sym;
-                    int vkey = chip8_keyboard_map(keyboard_map, key);
+                    int vkey = chip8_keyboard_map(&chip8.keyboard, key);
                     if (vkey != -1)
                         chip8_keyboard_up(&chip8.keyboard, vkey);
                 }
