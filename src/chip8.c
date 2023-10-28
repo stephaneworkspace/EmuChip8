@@ -97,6 +97,7 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
     unsigned char x = (opcode >> 8) & 0x000f;
     unsigned char y = (opcode >> 4) & 0x000f;
     unsigned char kk = opcode & 0x00ff;
+    unsigned char n = opcode & 0x000f;
     switch (opcode & 0xf000) {
         case 0x1000:
             // JP addr, 1nnn Jump to location nnn's
@@ -155,6 +156,13 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
             srand(clock());
             chip8->registers.V[x] = (rand() % 255) & kk;
             break;
+        case 0xD000:
+        {
+            // Dxyn - DRW Vx, Vy, nibble. Draws sprite to the screen
+            const char* sprite = (const char*) &chip8->memory.memory[chip8->registers.I];
+            //chip8->registers.V[0x0f] = chip8_screen_draw_sprite(&chip8->screen, chip8->registers.V[x], chip8->registers.V[y], sprite, n);
+            break;
+        }
     }
 }
 
