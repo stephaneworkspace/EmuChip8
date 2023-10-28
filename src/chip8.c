@@ -35,6 +35,27 @@ void chip8_load(struct chip8* chip8, const char* buf, size_t size) {
     chip8->registers.PC = CHIP8_PROGRAM_LOAD_ADRESS;
 }
 
-void chip8_exec(struct chip8* chip8, unsigned  short opcode) {
+static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
+    unsigned short nnn = opcode & 0x0fff;
+    switch (opcode & 0xf000) {
+        case 0x1000:
+            // JP addr, 1nnn Jump to location nnn's
+            chip8->registers.PC = nnn;
+            break;
+    }
+}
 
+void chip8_exec(struct chip8* chip8, unsigned  short opcode) {
+    switch (opcode) {
+        case 0x00E0:
+            // CLS: clear the display
+            chip8_screen_clear(&chip8->screen);
+            break;
+        case 0x00EE:
+            // Ret: Return from subroutine
+            chip8->registers.PC = chip8_stack_pop(chip8);
+            break;
+        default:
+            chip8_exec_extended(chip8, opcode);
+    }
 }
