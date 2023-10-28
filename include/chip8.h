@@ -5,8 +5,9 @@
 #ifndef EMUCHIP8_CHIP8_H
 #define EMUCHIP8_CHIP8_H
 
-#include <stddef.h>
 #include <assert.h>
+#include <stdbool.h>
+#include <stddef.h>
 #include "config.h"
 #include "chip8memory.h"
 #include "chip8registers.h"

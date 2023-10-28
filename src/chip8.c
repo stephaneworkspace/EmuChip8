@@ -39,10 +39,32 @@ static void chip8_exec_extended_eight(struct chip8* chip8, unsigned short opcode
     unsigned char x = (opcode >> 8) & 0x000f;
     unsigned char y = (opcode >> 4) & 0x000f;
     unsigned char final_four_bits = opcode & 0x000f;
+    unsigned short tmp = 0;
     switch (final_four_bits) {
-        case 0:
+        case 0x00:
             // 8xy0 - LD Vx, Vy. Vx = Vy
             chip8->registers.V[x] = chip8->registers.V[y];
+            break;
+        case 0x01:
+            // 8xy1 - OR Vx, Vy. Performs a bitwise OR on Vx and stores the result in Vx
+            chip8->registers.V[x] = chip8->registers.V[x] | chip8->registers.V[y];
+            break;
+        case 0x02:
+            // 8xy2 - AND Vx, Vy. Performs a bitwise AND on Vx and stores the result in Vx
+            chip8->registers.V[x] = chip8->registers.V[x] & chip8->registers.V[y];
+            break;
+        case 0x03:
+            // 8xy3 - XOR Vx, Vy. Performs a bitwise XOR on Vx and stores the result in Vx
+            chip8->registers.V[x] = chip8->registers.V[x] ^ chip8->registers.V[y];
+            break;
+        case 0x04:
+            // 8xy4 - ADD Vx, Vy. Set Vx + Vy, set VF = carry
+            tmp = chip8->registers.V[x] + chip8->registers.V[y];
+            chip8->registers.V[0x0f] = false;
+            if (tmp > 0xff) {
+                chip8->registers.V[0x0f] = true;
+            }
+            chip8->registers.V[x] = tmp;
             break;
     }
 }
