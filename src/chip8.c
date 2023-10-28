@@ -37,6 +37,8 @@ void chip8_load(struct chip8* chip8, const char* buf, size_t size) {
 
 static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
     unsigned short nnn = opcode & 0x0fff;
+    unsigned char x = (opcode >> 8) & 0x000f;
+    unsigned char kk = opcode & 0x00ff;
     switch (opcode & 0xf000) {
         case 0x1000:
             // JP addr, 1nnn Jump to location nnn's
@@ -46,6 +48,12 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
             // CALL addr, 2nnn Call at location nnn
             chip8_stack_push(chip8, chip8->registers.PC);
             chip8->registers.PC = nnn;
+            break;
+        case 0x3000:
+            // SE Vx, byte - 3xkk Skip next instruction if Vx=kk
+            if (chip8->registers.V[x] == kk) {
+                chip8->registers.PC += 2;
+            }
             break;
     }
 }

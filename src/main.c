@@ -67,12 +67,18 @@ int main(int argc, char *argv[]) {
      Keyboard test
      =============
     */
-    //chip8_keyboard_down(&chip8.keyboard, 0x0f);
-    //bool is_down = chip8_keyboard_is_down(&chip8.keyboard, 0x0f);
-    //printf("%i\n", (int) is_down);
+    // chip8_keyboard_down(&chip8.keyboard, 0x0f);
+    // bool is_down = chip8_keyboard_is_down(&chip8.keyboard, 0x0f);
+    // printf("%i\n", (int) is_down);
     // Drawing pixel screen
-    //chip8_screen_set(&chip8.screen, 10, 1);
-    //chip8.registers.sound_timer = 255;
+    // chip8_screen_set(&chip8.screen, 10, 1);
+    // chip8.registers.sound_timer = 255;
+
+    // test 0x300
+    // chip8.registers.PC = 0x00;
+    // chip8.registers.V[0x00] = 0x22;
+    // chip8_exec(&chip8, 0x3022);
+    // printf("%x\n", chip8.registers.PC);
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = SDL_CreateWindow(
