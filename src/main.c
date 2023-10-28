@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     struct chip8 chip8;
     chip8_init(&chip8);
 
-    chip8_screen_set(&chip8.screen, 10, 1);
+    chip8_screen_draw_sprite(&chip8.screen, 32, 30, &chip8.memory.memory[0x00], 5);
 
     /*
      Register test
@@ -37,6 +37,8 @@ int main(int argc, char *argv[]) {
     //chip8_keyboard_down(&chip8.keyboard, 0x0f);
     //bool is_down = chip8_keyboard_is_down(&chip8.keyboard, 0x0f);
     //printf("%i\n", (int) is_down);
+    // Drawing pixel screen
+    //chip8_screen_set(&chip8.screen, 10, 1);
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = SDL_CreateWindow(
