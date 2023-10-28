@@ -39,8 +39,9 @@ int main(int argc, char *argv[]) {
     struct chip8 chip8;
     chip8_init(&chip8);
     chip8_load(&chip8, buf, size);
-    chip8_exec(&chip8, 0x1ff2);
-    printf("%x\n", chip8.registers.PC);
+
+    //chip8_exec(&chip8, 0x1ff2);
+    //printf("%x\n", chip8.registers.PC);
 
     // test ecriture et blank
     // chip8_screen_draw_sprite(&chip8.screen, 32, 30, &chip8.memory.memory[0x00], 5);
@@ -143,8 +144,8 @@ int main(int argc, char *argv[]) {
         }
 
         unsigned short opcode = chip8_memory_get_short(&chip8.memory, chip8.registers.PC);
-        chip8_exec(&chip8, opcode);
         chip8.registers.PC += 2;
+        chip8_exec(&chip8, opcode);
         printf("%x\n", opcode);
     }
 

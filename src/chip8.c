@@ -42,6 +42,11 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
             // JP addr, 1nnn Jump to location nnn's
             chip8->registers.PC = nnn;
             break;
+        case 0x2000:
+            // CALL addr, 2nnn Call at location nnn
+            chip8_stack_push(chip8, chip8->registers.PC);
+            chip8->registers.PC = nnn;
+            break;
     }
 }
 
