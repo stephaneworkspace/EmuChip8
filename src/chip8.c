@@ -66,6 +66,29 @@ static void chip8_exec_extended_eight(struct chip8* chip8, unsigned short opcode
             }
             chip8->registers.V[x] = tmp;
             break;
+        case 0x05:
+            // 8xy5 - SUB Vx, Vy. Set vx = Vx, set VF = Not borrow
+            chip8->registers.V[0x0f] = false;
+            if (chip8->registers.V[x] > chip8->registers.V[y]) {
+                chip8->registers.V[0x0f] = true;
+            }
+            chip8->registers.V[x] = chip8->registers.V[x] - chip8->registers.V[y];
+            break;
+        case 0x06:
+            // 8xy6 - SHR Vx {, Vy}
+            chip8->registers.V[0x0f] = chip8->registers.V[x] & 0x01;
+            chip8->registers.V[x] /= 2;
+            break;
+        case 0x07:
+            // 8xy7 - SUBN Vx, Vy
+            chip8->registers.V[0x0f] = chip8->registers.V[y] > chip8->registers.V[x];
+            chip8->registers.V[x] = chip8->registers.V[y] - chip8->registers.V[x];
+            break;
+        case 0x0E:
+            // 8xyE - SHL Vx {, Vy}
+            chip8->registers.V[0x0f] = chip8->registers.V[x] & 0xb10000000;
+            chip8->registers.V[x] *= 2;
+            break;
     }
 }
 
@@ -111,8 +134,26 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
             chip8->registers.V[x] += kk;
             break;
         case 0x8000:
-            //
             chip8_exec_extended_eight(chip8, opcode);
+            break;
+        case 0x9000:
+            // 9xy0 - SNE Vy, Vy. Skip next instruction if Vx != Vy
+            if (chip8->registers.V[x] != chip8->registers.V[y]) {
+                chip8->registers.PC += 2;
+            }
+            break;
+        case 0xA000:
+            // Annn - LD I, addr. Sets the I register to nnn
+            chip8->registers.I = nnn;
+            break;
+        case 0xB000:
+            // Bnnn - Jump to location nnn + V0
+            chip8->registers.PC = nnn + chip8->registers.V[0x00];
+            break;
+        case 0xC000:
+            // Cxkk - RND Vx, byte
+            srand(clock());
+            chip8->registers.V[x] = (rand() % 255) & kk;
             break;
     }
 }

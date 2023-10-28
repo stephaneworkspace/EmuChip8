@@ -8,6 +8,8 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdlib.h>
+#include <time.h>
 #include "config.h"
 #include "chip8memory.h"
 #include "chip8registers.h"
