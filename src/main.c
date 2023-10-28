@@ -119,9 +119,9 @@ int main(int argc, char *argv[]) {
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
 
     // test
-    chip8.registers.V[0] = 0x00;
-    chip8_exec(&chip8, 0xF00A);
-    printf("%x\n", chip8.registers.V[0]);
+    // chip8.registers.V[0] = 0x00;
+    // chip8_exec(&chip8, 0xF00A);
+    // printf("%x\n", chip8.registers.V[0]);
 
     int running = 1;
     SDL_Event e;
