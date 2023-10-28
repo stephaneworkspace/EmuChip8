@@ -35,6 +35,18 @@ void chip8_load(struct chip8* chip8, const char* buf, size_t size) {
     chip8->registers.PC = CHIP8_PROGRAM_LOAD_ADRESS;
 }
 
+static void chip8_exec_extended_eight(struct chip8* chip8, unsigned short opcode) {
+    unsigned char x = (opcode >> 8) & 0x000f;
+    unsigned char y = (opcode >> 4) & 0x000f;
+    unsigned char final_four_bits = opcode & 0x000f;
+    switch (final_four_bits) {
+        case 0:
+            // 8xy0 - LD Vx, Vy. Vx = Vy
+            chip8->registers.V[x] = chip8->registers.V[y];
+            break;
+    }
+}
+
 static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
     unsigned short nnn = opcode & 0x0fff;
     unsigned char x = (opcode >> 8) & 0x000f;
@@ -67,6 +79,18 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned  short opcode) {
             if (chip8->registers.V[x] == chip8->registers.V[y]) {
                 chip8->registers.PC += 2;
             }
+            break;
+        case 0x6000:
+            // 6xkk LD Vx, byte, Vx = kk
+            chip8->registers.V[x] = kk;
+            break;
+        case 0x7000:
+            // 7xkk - ADD Vx, byte. Set Vx = Vx + kk
+            chip8->registers.V[x] += kk;
+            break;
+        case 0x8000:
+            //
+            chip8_exec_extended_eight(chip8, opcode);
             break;
     }
 }
